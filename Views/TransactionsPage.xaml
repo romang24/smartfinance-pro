@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Name="ThisPage"
+    x:Class="SmartFinancePro.Views.TransactionsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:SmartFinancePro.Views"
+    Title="{Binding Title}">
+
+
+
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <Label Text="Transactions" FontSize="24" />
+
+        <Button Text="Add dummy transaction" Command="{Binding AddDummyCommand}" />
+
+        <CollectionView ItemsSource="{Binding Transactions}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Delete"
+                                           Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.DeleteCommand}"
+                                           CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Grid Padding="12">
+                            <Label Text="{Binding Display}" FontSize="16" />
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
