@@ -26,5 +26,13 @@ public abstract class BaseViewModel : INotifyPropertyChanged
         get => _title;
         set => SetProperty(ref _title, value);
     }
+
+
+    private bool _isBusy;
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set => SetProperty(ref _isBusy, value);
+    }
 }
 

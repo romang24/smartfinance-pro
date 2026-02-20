@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmartFinancePro.Interfaces;
+using SmartFinancePro.Services;
 using SmartFinancePro.ViewModels;
 using SmartFinancePro.Views;
 
@@ -17,6 +19,9 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
+		// Services
+		builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
+
 		// ViewModels
 		builder.Services.AddSingleton<DashboardViewModel>();
 		builder.Services.AddSingleton<TransactionsViewModel>();
@@ -29,8 +34,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ReportsPage>();
 		builder.Services.AddSingleton<SettingsPage>();
 
+		// Shell
 		builder.Services.AddSingleton<AppShell>();
-
 
 #if DEBUG
 		builder.Logging.AddDebug();

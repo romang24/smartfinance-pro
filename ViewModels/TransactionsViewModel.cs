@@ -1,37 +1,81 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using SmartFinancePro.Interfaces;
 using SmartFinancePro.Models;
 
 namespace SmartFinancePro.ViewModels;
 
 public class TransactionsViewModel : BaseViewModel
 {
+    private readonly IDatabaseService _database;
+
     public ObservableCollection<Transaction> Transactions { get; } = new();
 
     public ICommand AddDummyCommand { get; }
     public ICommand DeleteCommand { get; }
+    public ICommand RefreshCommand { get; }
 
-    public TransactionsViewModel()
+    public TransactionsViewModel(IDatabaseService database)
     {
+        _database = database;
+
         Title = "Transactions";
 
-        Transactions.Add(new Transaction { Amount = 12.50m, Category = "Food", Date = new DateTime(2026, 2, 13) });
-        Transactions.Add(new Transaction { Amount = 1200.00m, Category = "Salary", Date = new DateTime(2026, 2, 1) });
-        Transactions.Add(new Transaction { Amount = 45.99m, Category = "Transport", Date = new DateTime(2026, 2, 10) });
+        AddDummyCommand = new Command(async () => await AddDummyAsync());
+        DeleteCommand = new Command<Transaction>(async (item) => await DeleteAsync(item));
+        RefreshCommand = new Command(async () => await LoadAsync());
 
-        AddDummyCommand = new Command(() =>
-            Transactions.Add(new Transaction
-            {
-                Amount = Random.Shared.Next(1, 200),
-                Category = "Misc",
-                Date = DateTime.Today
-            })
-        );
+        // Fire-and-forget initial load (safe for MAUI coursework)
+        _ = InitializeAndLoadAsync();
+    }
 
-        DeleteCommand = new Command<Transaction>((item) =>
+    private async Task InitializeAndLoadAsync()
+    {
+        await _database.InitializeAsync();
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        if (IsBusy) return;
+        IsBusy = true;
+
+        try
         {
-            if (item is null) return;
-            Transactions.Remove(item);
-        });
+            Transactions.Clear();
+            var items = await _database.GetTransactionsAsync();
+            foreach (var t in items)
+                Transactions.Add(t);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task AddDummyAsync()
+    {
+        var transaction = new Transaction
+        {
+            Amount = Random.Shared.Next(1, 200),
+            Category = "Misc",
+            Date = DateTime.Today,
+            Note = ""
+        };
+
+        await _database.AddTransactionAsync(transaction);
+
+        // Reload so ID + ordering are correct
+        await LoadAsync();
+    }
+
+    private async Task DeleteAsync(Transaction? item)
+    {
+        if (item is null) return;
+
+        await _database.DeleteTransactionAsync(item);
+
+        // Update UI immediately
+        Transactions.Remove(item);
     }
 }
