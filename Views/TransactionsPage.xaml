@@ -4,13 +4,11 @@
     x:Class="SmartFinancePro.Views.TransactionsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:SmartFinancePro.Views"
     Title="{Binding Title}">
-
-
 
     <VerticalStackLayout Padding="16" Spacing="12">
         <Label Text="Transactions" FontSize="24" />
+        <Label Text="Tap an item to edit • Swipe to delete" FontSize="12" Opacity="0.7" />
 
         <Button Text="Add dummy transaction" Command="{Binding AddDummyCommand}" />
 
@@ -27,6 +25,12 @@
                         </SwipeView.RightItems>
 
                         <Grid Padding="12">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.EditCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
+
                             <Label Text="{Binding Display}" FontSize="16" />
                         </Grid>
                     </SwipeView>

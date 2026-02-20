@@ -9,6 +9,9 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
+        // ✅ Route registration (works with parameterless EditTransactionPage)
+        Routing.RegisterRoute(nameof(EditTransactionPage), typeof(EditTransactionPage));
+
         var tabBar = new TabBar();
 
         tabBar.Items.Add(new ShellContent

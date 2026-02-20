@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using SmartFinancePro.Interfaces;
 using SmartFinancePro.Models;
+using SmartFinancePro.Views;
 
 namespace SmartFinancePro.ViewModels;
 
@@ -14,6 +15,7 @@ public class TransactionsViewModel : BaseViewModel
     public ICommand AddDummyCommand { get; }
     public ICommand DeleteCommand { get; }
     public ICommand RefreshCommand { get; }
+    public ICommand EditCommand { get; }
 
     public TransactionsViewModel(IDatabaseService database)
     {
@@ -24,8 +26,8 @@ public class TransactionsViewModel : BaseViewModel
         AddDummyCommand = new Command(async () => await AddDummyAsync());
         DeleteCommand = new Command<Transaction>(async (item) => await DeleteAsync(item));
         RefreshCommand = new Command(async () => await LoadAsync());
+        EditCommand = new Command<Transaction>(async (item) => await EditAsync(item));
 
-        // Fire-and-forget initial load (safe for MAUI coursework)
         _ = InitializeAndLoadAsync();
     }
 
@@ -64,8 +66,6 @@ public class TransactionsViewModel : BaseViewModel
         };
 
         await _database.AddTransactionAsync(transaction);
-
-        // Reload so ID + ordering are correct
         await LoadAsync();
     }
 
@@ -74,8 +74,19 @@ public class TransactionsViewModel : BaseViewModel
         if (item is null) return;
 
         await _database.DeleteTransactionAsync(item);
-
-        // Update UI immediately
         Transactions.Remove(item);
     }
+
+    private async Task EditAsync(Transaction? item)
+    {
+        if (item is null) return;
+
+        var navParams = new Dictionary<string, object>
+        {
+            { "transaction", item }
+        };
+
+        await Shell.Current.GoToAsync(nameof(EditTransactionPage), navParams);
+    }
+        
 }
