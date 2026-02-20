@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SmartFinancePro.Views.EditTransactionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Edit Transaction">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+
+            <Label Text="Amount" FontAttributes="Bold" />
+            <Entry
+                Text="{Binding Amount}"
+                Keyboard="Numeric"
+                Placeholder="e.g., 25.99" />
+
+            <Label Text="Category" FontAttributes="Bold" />
+            <Entry
+                Text="{Binding Category}"
+                Placeholder="e.g., Transport" />
+
+            <Label Text="Date" FontAttributes="Bold" />
+            <DatePicker Date="{Binding Date}" />
+
+            <Label Text="Note" FontAttributes="Bold" />
+            <Editor
+                Text="{Binding Note}"
+                AutoSize="TextChanges"
+                Placeholder="Optional note..."
+                HeightRequest="90" />
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,10,0,0">
+                <Button
+                    Grid.Column="0"
+                    Text="Cancel"
+                    Command="{Binding CancelCommand}" />
+
+                <Button
+                    Grid.Column="1"
+                    Text="Save Changes"
+                    Command="{Binding SaveCommand}" />
+            </Grid>
+
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                Margin="0,10,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
