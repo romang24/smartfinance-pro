@@ -1,23 +1,19 @@
 # SmartFinance Pro
 
-## Overview
-SmartFinance Pro is a cross-platform mobile application built using .NET MAUI and C#. The application allows users to track income and expenses, categorise transactions, and analyse financial behaviour.
+SmartFinance Pro is a mobile finance tracking application built using **C# and .NET MAUI**.
 
-## Motivation
-The aim of this project is to demonstrate proficiency in .NET MAUI, C#, MVVM architecture, and version control practices.
+The app allows users to track income and expenses, view financial reports, and manage personal financial data through a simple mobile interface.
 
-## Core Features (Planned)
-- Add, edit, delete transactions
-- Categorise income and expenses
-- Dashboard financial summary
-- Reports with charts
-- Currency conversion via external API
-- SQLite data persistence
+## Features
 
-## Technologies
-- .NET MAUI
+- Dashboard showing income, expenses, and balance
+- Transaction tracking system
+- Financial reports with charts
+- Settings including dark mode and currency preferences
+
+## Technologies Used
+
 - C#
-- MVVM pattern
-- SQLite
-- REST APIs
-- Git version control
+- .NET MAUI
+- Firebase Authentication
+- Android Emulator
